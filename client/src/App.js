@@ -1,29 +1,53 @@
-import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Routess from "./App.css";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./pages/ProtectedRoute";
+import ProtectedAdmin from "./pages/Admin/ProtectedAdmin";
+import ErrorPage from "./pages/errorPage";
 import Products from "./pages/Products";
+import Signin from "./pages/Auth/Signin";
+import Signup from "./pages/Auth/Signup";
+import Profile from "./pages/Profile";
+import AdminHome from "./pages/Admin/Home";
+import Orders from "./pages/Admin/Orders";
+import AdminProducts from "./pages/Admin/Products";
+import AdminProductsDetail from "./pages/Admin/ProductDetail";
+import Basket from "./pages/Basket";
 import ProductDetail from "./pages/ProductDetail";
-import Signin from "./pages/Auth/Signin/Signin"
-import Signup from "./pages/Auth/Signup/Signup"
-import Profile from "./pages/Profile"
-
+import NewProduct from "./pages/Admin/Products/new";
 
 function App() {
   return (
-    <Router>
-      <div id="content">
-        <Navbar/>
+    <div className="App">
+      <Navbar />
+      <div className={Routess}>
         <Routes>
-          <Route path="/" exact Component={Products} />
-          <Route path="/product/:product_id" Component={ProductDetail} />
-          <Route path="/signin" Component={Signin} />
-          <Route path="/signup" Component={Signup} />
-          <Route path="/profile" Component={Profile} />
+          <Route index path="/" element={<Products />} />
+          <Route path="/product/:product_id" element={<ProductDetail />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+          Basket
+          <Route path="/basket" element={<Basket />} />
+          {/* react-router-dom v6 */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+          <Route element={<ProtectedAdmin />}>
+            {/* https://www.robinwieruch.de/react-router-nested-routes/ */}
+            <Route index path="/admin" element={<AdminHome />} />
+            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route
+              path="/admin/products/:product_id"
+              element={<AdminProductsDetail />}
+            />
+            <Route path="/admin/products/new" element={<NewProduct />} />
+          </Route>
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
-    </Router>
+    </div>
   );
 }
-
 
 export default App;
